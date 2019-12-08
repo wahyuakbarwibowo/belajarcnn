@@ -12,7 +12,7 @@ RUN apt-get -y install nginx git
 
 RUN apt-get -y install git
 
-RUN apt-get sudo apt-get -y install git install libsm6 libxext6 libxrender-dev
+RUN apt-get apt-get -y install git install libsm6 libxext6 libxrender-dev
 
 ADD . /flask-app
 
