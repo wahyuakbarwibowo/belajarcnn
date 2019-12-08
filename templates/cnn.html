@@ -56,8 +56,20 @@
                     <input type="text" class="form-control" placeholder="Epoch" name="query_epoch" id="id_epoch">
                 </div>
                 <div class="col">
-                    <label for="id_layers">Jumlah Layer</label>
-                    <input type="text" class="form-control" placeholder="Jumlah Layers" name="query_layers" id="id_layers">
+                    <label>Tipe Model</label><br>
+                    <!--<input type="text" class="form-control" placeholder="Jumlah Layers" name="query_layers" id="id_layers">-->
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="tipeModel" value="1">
+						<label class="form-check-label" for="inlineRadio1">Model 1</label>
+					</div>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="tipeModel" value="2">
+						<label class="form-check-label" for="inlineRadio1">Model 2</label>
+					</div>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="tipeModel" value="3">
+						<label class="form-check-label" for="inlineRadio1">Model 3</label>
+					</div>
                 </div>
                 <div class="col-md-1">
                     <input type="hidden" name="mode" value="Training">
