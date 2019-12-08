@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
+    <style>
+        .vertical {
+            margin-top: 50%;
+        }
+        
+        .citra {
+            width: 100px;
+            height: 100px;
+        }
+        
+        .citra-hasil {
+            width: 300px;
+            height: 300px;
+        }
+    </style>
+    <title>CNN</title>
+</head>
+
+<body>
+    <h1 class='text-center'>Convolution Neural Network for Classification Fashion Mnist</h1>
+    <div class='container'>
+        <div class="row mt-md-2 bg-dark">
+            <div class="col p-md-4 text-center"></div>
+        </div>
+        <br>
+        <form method="post" enctype="multipart/form-data">
+            <h2 class="text-center">Training</h2>
+            <div class="row mt-md-5 form-group">
+                <label for="komposisi" id='komposisiLabel'>Komposisi</label>
+                <input type="range" class="custom-range" min="5" max="95" step="1" value='80' id="komposisi" name='komposisi'>
+            </div>
+            <script>
+                var komposisi = document.getElementById('komposisi');
+                var komposisiLabel = document.getElementById('komposisiLabel')
+                komposisiLabel.innerHTML = 'Komposisi : ' + komposisi.value + '% training, ' + (100 - komposisi.value) + '% testing'
+                komposisi.onchange = function() {
+                    var testing = 100 - this.value
+                    komposisiLabel.innerHTML = 'Komposisi : ' + this.value + '% training, ' + testing + '% testing';
+                }
+                komposisi.oninput = function() {
+                    var testing = 100 - this.value
+                    komposisiLabel.innerHTML = 'Komposisi : ' + this.value + '% training, ' + testing + '% testing';
+                }
+            </script>
+            <div class='row mt-md-5 form-group'>
+                <div class="col">
+                    <label for="id_epoch">Jumlah Epoch</label>
+                    <input type="text" class="form-control" placeholder="Epoch" name="query_epoch" id="id_epoch">
+                </div>
+                <div class="col">
+                    <label for="id_layers">Jumlah Layer</label>
+                    <input type="text" class="form-control" placeholder="Jumlah Layers" name="query_layers" id="id_layers">
+                </div>
+                <div class="col-md-1">
+                    <input type="hidden" name="mode" value="Training">
+                    <button class="btn btn-primary" type="submit" style="margin-top: 30px;">Train</button>
+                </div>
+            </div>
+        </form>
+        <br>
+        <!-- <h2 class="text-center">Testing</h2> -->
+        <!-- {% if summary %}
+        <div class="row">
+            <div class="col">
+                <h3 class='text-center'>Model Summary</h3>
+            </div>
+            <div class="col text-center">
+                {{ summary }}
+            </div>
+        </div>
+        {% endif %} -->
+        <div class="row">
+            <div class="col">
+                Test Loss : {% if test_loss %} {{ test_loss }} {% else %} - {% endif %}
+            </div>
+            <div class="col">
+                Test Accuracy : {% if test_accuracy %} {{ test_accuracy }} {% else %} - {% endif %}
+            </div>
+            <!-- <div class="col">
+                <form action="" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="mode" value="Testing">
+                    <button type="submit" class="btn btn-primary" style="padding: 5px auto;">Test</button>
+                </form>
+            </div> -->
+        </div>
+        <br>
+        <h2 class="text-center">Testing</h2>
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="mode" value="Test">
+            <div class='row mt-md-5 form-group'>
+                <div class="col-md-5"></div>
+                <div class="col-md-2 text-center">
+                    <label class='text-center' for="test_ke">Data Test Ke - </label>
+                    <input type="text" class="form-control" placeholder="Max. 10000" name="test_ke" id="test_ke">
+                    <input type="hidden" name="mode" value="Testing">
+                    <br>
+                    <button type="submit" class="btn btn-primary">Test</button>
+                </div>
+            </div>
+            <div class="col-md-5"></div>
+            <!-- <h3 class="text-center">Choose one image or input file image to predict class</h3>
+            <div class="row">
+                <div class="col">
+                    <img class="mx-auto d-block citra" src="./static/assets/images/fashion_image_test/0.jpg">
+                    <br>
+                    <div class="radio">
+                        <input class="mx-auto d-block" type="radio" name="optradioimg" value="0" checked="checked">
+                    </div>
+                </div>
+                <div class="col">
+                    <img class="mx-auto d-block citra" src="./static/assets/images/fashion_image_test/1.jpg">
+                    <br>
+                    <div class="radio">
+                        <input class="mx-auto d-block" type="radio" name="optradioimg" value="1">
+                    </div>
+                </div>
+                <div class="col">
+                    <img class="mx-auto d-block citra" src="./static/assets/images/fashion_image_test/2.jpg">
+                    <br>
+                    <div class="radio">
+                        <input class="mx-auto d-block" type="radio" name="optradioimg" value="2">
+                    </div>
+                </div>
+                <div class="col">
+                    <img class="mx-auto d-block citra" src="./static/assets/images/fashion_image_test/3.jpg">
+                    <br>
+                    <div class="radio">
+                        <input class="mx-auto d-block" type="radio" name="optradioimg" value="3">
+                    </div>
+                </div>
+                <div class="col">
+                    <img class="mx-auto d-block citra" src="./static/assets/images/fashion_image_test/4.jpg">
+                    <br>
+                    <div class="radio">
+                        <input class="mx-auto d-block" type="radio" name="optradioimg" value="4">
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <img class="mx-auto d-block citra" src="./static/assets/images/fashion_image_test/5.jpg">
+                    <br>
+                    <div class="radio">
+                        <input class="mx-auto d-block" type="radio" name="optradioimg" value="5">
+                    </div>
+                </div>
+                <div class="col">
+                    <img class="mx-auto d-block citra" src="./static/assets/images/fashion_image_test/6.jpg">
+                    <br>
+                    <div class="radio">
+                        <input class="mx-auto d-block" type="radio" name="optradioimg" value="6">
+                    </div>
+                </div>
+                <div class="col">
+                    <img class="mx-auto d-block citra" src="./static/assets/images/fashion_image_test/7.jpg">
+                    <br>
+                    <div class="radio">
+                        <input class="mx-auto d-block" type="radio" name="optradioimg" value="7">
+                    </div>
+                </div>
+                <div class="col">
+                    <img class="mx-auto d-block citra" src="./static/assets/images/fashion_image_test/8.jpg">
+                    <br>
+                    <div class="radio">
+                        <input class="mx-auto d-block" type="radio" name="optradioimg" value="8">
+                    </div>
+                </div>
+                <div class="col">
+                    <img class="mx-auto d-block citra" src="./static/assets/images/fashion_image_test/9.jpg">
+                    <br>
+                    <div class="radio">
+                        <input class="mx-auto d-block" type="radio" name="optradioimg" value="9">
+                    </div>
+                </div>
+            </div> 
+            <br>
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="custom-file">
+                        <input id='inputFile' type="file" class="custom-file-input" name="query_img_upload">
+                        <label id='labelInputFile' class="custom-file-label" for="inputFile">Choose Image Test (opsional)</label>
+                    </div>
+                </div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-2">
+                    <input type="hidden" name="mode" value="Predict">
+                    <button type="submit" class="btn btn-primary">Predict</button>
+                </div>
+            </div>
+            -->
+    </div>
+    </form>
+    <br> {% if kelas %}
+    <div class='row'>
+        <div class='col'>
+            <img class='mx-auto d-block citra-hasil' src="{{url_for('static', filename='assets/images/hasil/hasil.png')}}" alt="citra test">
+        </div>
+        <div class='col'>
+            <h3 class='text'>Kelas : {{ kelas }}</h3>
+        </div>
+    </div>
+    <br><br> {% endif %}
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/js/bootstrap.min.js" integrity="sha384-3qaqj0lc6sV/qpzrc1N5DC6i1VRn/HyX4qdPaiEFbn54VjQBEU341pvjz7Dv3n6P" crossorigin="anonymous"></script>
+</body>
+
+</html>
