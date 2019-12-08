@@ -99,4 +99,4 @@ def show_cnn():
         return render_template('cnn.html')
 
 if __name__ == "__main__":
-    app.run(threaded=False)
+    app.run(host='0.0.0.0',threaded=False)
