@@ -42,7 +42,7 @@ def show_cnn():
                 model.add(Dense(10, activation='softmax'))
                 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
                 print("training model 1")
-                model.fit(training_images, training_labels, epochs=epochs)
+                model.fit(data_training, target_training, epochs=epochs)
                 model.summary()
             elif tipeModel == "2":
                 model = Sequential()
@@ -53,7 +53,7 @@ def show_cnn():
                 model.add(Dense(10, activation='softmax'))
                 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
                 print("training model 2")
-                model.fit(training_images, training_labels, epochs=epochs)
+                model.fit(data_training, target_training, epochs=epochs)
                 model.summary()
             else:
                 model = Sequential()
@@ -63,7 +63,7 @@ def show_cnn():
                 model.add(Dense(10, activation='softmax'))
                 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
                 print("training model 3")
-                model.fit(training_images, training_labels, epochs=epochs)
+                model.fit(data_training, target_training, epochs=epochs)
                 model.summary()
             
             model.save('static/assets/model/cnn/model.h5') 
@@ -85,7 +85,7 @@ def show_cnn():
             
             result = model.predict(test_images_r)
             print(result[0])
-            kelasInd = 0;
+            kelasInd = 0
             for i in range(len(result[test])):
                 if result[test][i] > result[test][kelasInd]:
                     kelasInd = i
