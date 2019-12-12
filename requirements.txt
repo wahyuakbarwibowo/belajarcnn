@@ -54,5 +54,4 @@ termcolor
 typed-ast
 urllib3
 Werkzeug
-wincertstor
 wrapt
